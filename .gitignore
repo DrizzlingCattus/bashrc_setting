@@ -1,3 +1,6 @@
+# user system path file for hand made path
 path.sh
+
+# user system's package path that automatically inserted or need to optional setting
 *_setting.sh
 
