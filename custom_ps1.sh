@@ -15,7 +15,7 @@ function parse_git_branch() {
 	if [ ! "${BRANCH}" == "" ]
 	then
 		STAT=`parse_git_dirty`
-		echo "[${BRANCH}${STAT}]"
+		echo "${blue}(${blue}${BRANCH}${STAT}${blue})"
 	else
 		echo ""
 	fi
@@ -30,7 +30,7 @@ function parse_git_dirty {
 	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
 	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
 	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
-	bits=''
+	bits=""
 	if [ "${renamed}" == "0" ]; then
 		bits=">${bits}"
 	fi
@@ -38,16 +38,16 @@ function parse_git_dirty {
 		bits="*${bits}"
 	fi
 	if [ "${newfile}" == "0" ]; then
-		bits="+${bits}"
+		bits="${green}+${bits}"
 	fi
 	if [ "${untracked}" == "0" ]; then
-		bits="?${bits}"
+		bits="${red}?${bits}"
 	fi
 	if [ "${deleted}" == "0" ]; then
-		bits="x${bits}"
+		bits="${red}x${bits}"
 	fi
 	if [ "${dirty}" == "0" ]; then
-		bits="!${bits}"
+		bits="${red}!${bits}"
 	fi
 	if [ ! "${bits}" == "" ]; then
 		echo " ${bits}"
@@ -57,14 +57,14 @@ function parse_git_dirty {
 }
 
 PS1="${green}[" # start next info part
-PS1+="${cyan}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
+PS1+="${white}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
 PS1+="${green}]" # end next info part 
-PS1+="${green}[" # start next info part
-PS1+="${magenta}\u" # username
+#PS1+="${green}[" # start next info part
+PS1+="${white}\u" # username
 PS1+="${blue}:" # delimeter
 PS1+="${magenta}\W" # current working directory
-PS1+="\[\e[m\]\`parse_git_branch\`"
-PS1+="${green}]" # end next info part
+PS1+="\[\e[m\]$(parse_git_branch)"
+#PS1+="${green}]" # end next info part
 PS1+="${green}➜ ${white}" # command start symbol
 export PS1;
 
