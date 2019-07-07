@@ -65,7 +65,7 @@ PS1+="${blue}:" # delimeter
 PS1+="${magenta}\W" # current working directory
 PS1+="\[\e[m\]$(parse_git_branch)"
 #PS1+="${green}]" # end next info part
-PS1+="${green}➜ ${white}" # command start symbol
+PS1+=" ${green}➜ ${white}" # command start symbol
 export PS1;
 
 
