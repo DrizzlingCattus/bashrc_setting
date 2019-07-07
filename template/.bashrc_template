@@ -1,0 +1,31 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+# User defined aliases
+if [ -f $HOME/.bash_aliases ]; then
+    . $HOME/.bash_aliases
+fi
+
+# load bashrc modules
+# there is PATH relative setting
+for i in $HOME/.bashrc.d/*.sh ; do
+    if [ -r "$i" ]; then
+	if [ "${-#*i}" != "$-" ]; then
+	    . "$i"
+	else
+	    . "$i" >/dev/null
+	fi
+    fi
+done
+
+unset i
+
