@@ -4,14 +4,15 @@ source lib/tools.sh
 # reference) http://linuxcommand.org/lc3_adv_tput.php
 # BUG:: text not wrapping second line if use tput
 init_color="\[\e[m\]"
-black="\[$(tput setaf 0)\]"
-red="\[$(tput setaf 1)\]"
-green="\[$(tput setaf 2)\]"
-yellow="\[$(tput setaf 3)\]"
-blue="\[$(tput setaf 4)\]"
-magenta="\[$(tput setaf 5)\]"
-cyan="\[$(tput setaf 6)\]"
-white="\[$(tput setaf 7)\]"
+
+#black="\[$(tput setaf 0)\]"
+#red="\[$(tput setaf 1)\]"
+#green="\[$(tput setaf 2)\]"
+#yellow="\[$(tput setaf 3)\]"
+#blue="\[$(tput setaf 4)\]"
+#magenta="\[$(tput setaf 5)\]"
+#cyan="\[$(tput setaf 6)\]"
+#white="\[$(tput setaf 7)\]"
 
 #red="\[\e[0;31m\]"
 #green="\[\e[0;32m\]"
@@ -19,14 +20,34 @@ white="\[$(tput setaf 7)\]"
 #magenta="\[\e[0;35m\]"
 #white="\[\e[0;37m\]"
 
+red=1
+green=2
+yellow=3
+blue=4
+magenta=5
+cyan=6
+white=7
+
+paint_color() {
+    local is_delay=$1
+    local color_v=$2
+    local target=$3
+    if [ 'f' == $is_delay ] ; then
+	echo "\[$(tput setaf $color_v)$target\]"
+    elif [ 't' == $is_delay ] ; then
+	echo "$(tput setaf $color_v)$target"
+    fi
+}
+
 
 # get current branch in git repo
 __print_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+    BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+    echo "$(paint_color 't' $red @)$(paint_color 't' $blue ${BRANCH})"
 }
 
 __print_git_stat() {
-    parse_git_dirty
+    echo "$(paint_color 't' $yellow $(parse_git_dirty))"
 }
 
 #function parse_git_branch() {
@@ -83,21 +104,32 @@ forward_directory_path="$HOME/.bashrc.d/forward.ps1.d"
 load_files "$forward_directory_path/*.sh"
 unset forward_directory_path
 
-PS1+="${green}[" # start next info part
-PS1+="${white}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
-PS1+="${green}]" # end next info part 
+##PS1+="${green}[" # start next info part
+##PS1+="${white}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
+##PS1+="${green}]" # end next info part 
 
-#PS1+="${green}[" # start next info part
-PS1+="${white}\u" # username
-PS1+="${green}:" # delimeter
-PS1+="${magenta}\W" # current working directory
-PS1+="${blue}("
-PS1+="\$(__print_git_branch)"
-PS1+="${yellow}\$(__print_git_stat)"
-PS1+="${blue})"
-#PS1+="${green}]" # end next info part
+PS1+="$(paint_color 'f' $green '[')" # start next info part
+PS1+="$(paint_color 'f' $white '\D{%Y-%m-%d %H:%M:%S}')" # date with time like 2019-06-07 07:19:30
+PS1+="$(paint_color 'f' $green ']')" # end next info part 
 
-PS1+="${green}@ ${init_color}" # command start symbol
+
+#PS1+="${white}\u" # username
+#PS1+="${green}:" # delimeter
+##PS1+="${magenta}\W" # current working directory
+##PS1+="${blue}("
+##PS1+="\$(__refresher)"
+##PS1+="\$(__print_git_branch)"
+##PS1+="${yellow}\$(__print_git_stat)"
+##PS1+="${blue})"
+
+PS1+="$(paint_color 'f' $magenta '\W')" # current working directory
+PS1+="$(paint_color 'f' $blue '(')"
+PS1+="\[\$(__print_git_branch)\]"
+PS1+="\[\$(__print_git_stat)\]"
+PS1+="$(paint_color 'f' $blue ')')"
+
+PS1+="$(paint_color 'f' $green @) ${init_color}"
+##PS1+="${green}@ ${init_color}" # command start symbol
 # BUG:: arrow symbol occur problem that text is not wrapping second line 
 #PS1+=" ${green}➜ \[\e[m\]" # command start symbol
 
