@@ -1,3 +1,4 @@
+source lib/tools.sh
 
 # Colors
 # reference) http://linuxcommand.org/lc3_adv_tput.php
@@ -20,11 +21,11 @@ white="\[$(tput setaf 7)\]"
 
 
 # get current branch in git repo
-function __print_git_branch() {
+__print_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
-function __print_git_stat() {
+__print_git_stat() {
     parse_git_dirty
 }
 
@@ -40,7 +41,7 @@ function __print_git_stat() {
 #}
 
 # get current status of git repo
-function parse_git_dirty {
+parse_git_dirty() {
     status=`git status 2>&1 | tee`
     dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
     untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
@@ -75,7 +76,14 @@ function parse_git_dirty {
 }
 
 
-PS1="${green}[" # start next info part
+PS1="" # initiate
+
+# Forward PS1 processing
+forward_directory_path="$HOME/.bashrc.d/forward.ps1.d"
+load_files "$forward_directory_path/*.sh"
+unset forward_directory_path
+
+PS1+="${green}[" # start next info part
 PS1+="${white}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
 PS1+="${green}]" # end next info part 
 
@@ -84,13 +92,19 @@ PS1+="${white}\u" # username
 PS1+="${green}:" # delimeter
 PS1+="${magenta}\W" # current working directory
 PS1+="${blue}("
-PS1+="\`__print_git_branch\`"
-PS1+="${yellow}\`__print_git_stat\`"
+PS1+="\$(__print_git_branch)"
+PS1+="${yellow}\$(__print_git_stat)"
 PS1+="${blue})"
 #PS1+="${green}]" # end next info part
 
 PS1+="${green}@ ${init_color}" # command start symbol
 # BUG:: arrow symbol occur problem that text is not wrapping second line 
 #PS1+=" ${green}➜ \[\e[m\]" # command start symbol
+
+# Backward PS1 processing 
+backward_directory_path="$HOME/.bashrc.d/backward.ps1.d"
+load_files "$backward_directory_path/*.sh"
+unset backward_directory_path
+
 export PS1;
 
