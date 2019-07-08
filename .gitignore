@@ -6,3 +6,5 @@ path.sh
 
 # test script's grave
 disposable/*
+
+*.log

@@ -14,3 +14,8 @@ load_files() {
 
     unset i
 }
+
+debug_v() {
+    local stacked_file="$(pwd)/debug.log"
+    echo "$@" >> "$stacked_file"
+}
