@@ -22,6 +22,8 @@ paint_color() {
 	echo "\[$(tput setaf $color_v)$target\]"
     elif [ 't' == $is_delay ] ; then
 	echo "$(tput setaf $color_v)$target"
+    else
+	echo ""
     fi
 }
 
