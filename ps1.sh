@@ -5,21 +5,7 @@ source lib/tools.sh
 # BUG:: text not wrapping second line if use tput
 init_color="\[\e[m\]"
 
-#black="\[$(tput setaf 0)\]"
-#red="\[$(tput setaf 1)\]"
-#green="\[$(tput setaf 2)\]"
-#yellow="\[$(tput setaf 3)\]"
-#blue="\[$(tput setaf 4)\]"
-#magenta="\[$(tput setaf 5)\]"
-#cyan="\[$(tput setaf 6)\]"
-#white="\[$(tput setaf 7)\]"
-
-#red="\[\e[0;31m\]"
-#green="\[\e[0;32m\]"
-#blue="\[\e[34m\]"
-#magenta="\[\e[0;35m\]"
-#white="\[\e[0;37m\]"
-
+black=0
 red=1
 green=2
 yellow=3
@@ -43,23 +29,12 @@ paint_color() {
 # get current branch in git repo
 __print_git_branch() {
     BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-    echo "$(paint_color 't' $red @)$(paint_color 't' $blue ${BRANCH})"
+    echo "$(paint_color 't' $blue ${BRANCH})"
 }
 
 __print_git_stat() {
     echo "$(paint_color 't' $yellow $(parse_git_dirty))"
 }
-
-#function parse_git_branch() {
-#    BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-#    if [ ! "${BRANCH}" == "" ]
-#    then
-#	STAT=`parse_git_dirty`
-#	echo "\`${blue}(${blue}${BRANCH}${STAT}${blue})\`"
-#    else
-#	echo ""
-#    fi
-#}
 
 # get current status of git repo
 parse_git_dirty() {
@@ -70,7 +45,7 @@ parse_git_dirty() {
     newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
     renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
     deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
-    bits=""
+    bits=''
     if [ "${renamed}" == "0" ]; then
 	bits=">${bits}"
     fi
@@ -104,23 +79,9 @@ forward_directory_path="$HOME/.bashrc.d/forward.ps1.d"
 load_files "$forward_directory_path/*.sh"
 unset forward_directory_path
 
-##PS1+="${green}[" # start next info part
-##PS1+="${white}\D{%Y-%m-%d %H:%M:%S}" # date with time like 2019-06-07 07:19:30
-##PS1+="${green}]" # end next info part 
-
 PS1+="$(paint_color 'f' $green '[')" # start next info part
 PS1+="$(paint_color 'f' $white '\D{%Y-%m-%d %H:%M:%S}')" # date with time like 2019-06-07 07:19:30
 PS1+="$(paint_color 'f' $green ']')" # end next info part 
-
-
-#PS1+="${white}\u" # username
-#PS1+="${green}:" # delimeter
-##PS1+="${magenta}\W" # current working directory
-##PS1+="${blue}("
-##PS1+="\$(__refresher)"
-##PS1+="\$(__print_git_branch)"
-##PS1+="${yellow}\$(__print_git_stat)"
-##PS1+="${blue})"
 
 PS1+="$(paint_color 'f' $magenta '\W')" # current working directory
 PS1+="$(paint_color 'f' $blue '(')"
@@ -128,10 +89,9 @@ PS1+="\[\$(__print_git_branch)\]"
 PS1+="\[\$(__print_git_stat)\]"
 PS1+="$(paint_color 'f' $blue ')')"
 
-PS1+="$(paint_color 'f' $green @) ${init_color}"
-##PS1+="${green}@ ${init_color}" # command start symbol
 # BUG:: arrow symbol occur problem that text is not wrapping second line 
 #PS1+=" ${green}➜ \[\e[m\]" # command start symbol
+PS1+="$(paint_color 'f' $green @) ${init_color}"
 
 # Backward PS1 processing 
 backward_directory_path="$HOME/.bashrc.d/backward.ps1.d"
