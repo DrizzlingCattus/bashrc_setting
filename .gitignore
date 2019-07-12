@@ -7,4 +7,7 @@ path.sh
 # test script's grave
 disposable/*
 
+# files for consider to adjust
+consider/*
+
 *.log
