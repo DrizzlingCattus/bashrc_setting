@@ -91,9 +91,10 @@ forward_directory_path="$HOME/.bashrc.d/forward.ps1.d"
 load_files "$forward_directory_path/*.sh"
 unset forward_directory_path
 
-PS1+="$(__paint_color 'f' $green '[')" # start next info part
-PS1+="$(__paint_color 'f' $white '\D{%Y-%m-%d %H:%M:%S}')" # date with time like 2019-06-07 07:19:30
-PS1+="$(__paint_color 'f' $green ']')" # end next info part 
+#PS1+="$(__paint_color 'f' $green '[')" # start next info part
+#PS1+="$(__paint_color 'f' $white '\D{%Y-%m-%d %H:%M:%S}')" # date with time like 2019-06-07 07:19:30
+#PS1+="$(__paint_color 'f' $green ']')" # end next info part 
+PS1+='➡ '
 
 PS1+="$(__paint_color 'f' $magenta '\W')" # current working directory
 PS1+="$(__paint_color 'f' $blue '(')"

@@ -2,10 +2,13 @@
 path.sh
 
 # user system's package path that automatically inserted or need to optional setting
-*_setting.sh
+*-setting.sh
 
 # test script's grave
 disposable/*
+
+# files for consider to adjust
+consider/*
 
 *.log
 
