@@ -8,3 +8,5 @@ path.sh
 disposable/*
 
 *.log
+
+lang.sh
