@@ -8,6 +8,7 @@ function __get_tab_title() {
 
 # if attach back slash in front of $, it cannot evaluate normally
 # and without it, it can re-evaluate function
-# why.... 
-PS1+="$(__get_tab_title)"
+# why....
+# disable, cuz there is bug that consume terminal chars
+#PS1+="$(__get_tab_title)"
 
